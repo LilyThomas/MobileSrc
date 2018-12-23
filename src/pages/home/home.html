@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-buttons>
+            <button ion-button (click)='goToOverview()'>
+              <ion-icon name='person'></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+
+        <ion-col>
+          <ion-icon name='md-flame'></ion-icon>
+        </ion-col>
+
+        <ion-col>
+          <ion-buttons>
+            <button ion-button (click)='goToChat()'>
+              <ion-icon name='ios-chatbubbles'></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor='let emp of employees' (click)='showDetails(emp)'>
+      <div>
+        <h3>{{emp.doc.firstName}} {{emp.doc.lastName}}</h3>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+
+        </ion-col>
+
+        <ion-col>
+          <ion-icon name='person'></ion-icon>
+        </ion-col>
+
+        <ion-col>
+          <ion-buttons>
+            <button ion-button (click)='goToHome()'>
+              <ion-icon name='md-flame'></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <div>
+    <p text-center >
+      <ion-buttons>
+        <button (click)="goToProfile()" >
+          <img src="../../images/profile.jpg" style="min-height:50%; max-width:90%;border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
+        </button>
+      </ion-buttons>
+    </p>
+  </div>
+
+  <div>
+    <p text-center>
+      Twinkel, 8
+    </p>
+  </div>
+
+  <div>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-buttons>
+            <button>
+              <ion-icon name="settings"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+
+        <ion-col>
+          <ion-buttons>
+            <button>
+              <ion-icon name="camera"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+
+        <ion-col>
+          <ion-buttons>
+            <button>
+              <ion-icon name="brush"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+
+</ion-content>
