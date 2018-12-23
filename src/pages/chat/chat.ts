@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import {HomePage} from "../home/home";
-import {EmployeePage} from "../employee/employee";
+import { EmployeeProvider } from './../../providers/employee/employee';
 
 @IonicPage()
 @Component({
@@ -16,10 +16,15 @@ export class ChatPage {
 
   constructor(
     public navCtrl: NavController,
+    public modalCtrl: ModalController,
+    public empProv: EmployeeProvider
   ) {}
 
   goToHome(){
     this.navCtrl.setRoot(this.homepage);
   }
 
+  GoToConversation() {
+    this.navCtrl.setRoot(this.homepage);
+  }
 }

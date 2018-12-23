@@ -28,7 +28,8 @@
     <p text-center >
       <ion-buttons>
         <button (click)="goToProfile()" >
-          <img src="../../images/profile.jpg" style="min-height:50%; max-width:90%;border-radius:5%;margin-top:10px;box-shadow: 2px 3px 5px grey;">
+          <!--<img src="assets/imgs/profile.jpg">-->
+          <img src='{{tempImagePath}}'>
         </button>
       </ion-buttons>
     </p>
@@ -46,7 +47,7 @@
       <ion-row>
         <ion-col>
           <ion-buttons>
-            <button>
+            <button ion-button (click)='GoToSettings()'>
               <ion-icon name="settings"></ion-icon>
             </button>
           </ion-buttons>
@@ -54,7 +55,7 @@
 
         <ion-col>
           <ion-buttons>
-            <button>
+            <button ion-button (click)='goToCamera()'>
               <ion-icon name="camera"></ion-icon>
             </button>
           </ion-buttons>
@@ -62,7 +63,7 @@
 
         <ion-col>
           <ion-buttons>
-            <button>
+            <button ion-button (click)='GoToEditProfile()'>
               <ion-icon name="brush"></ion-icon>
             </button>
           </ion-buttons>

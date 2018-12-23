@@ -12,6 +12,10 @@ import { ImageProvider } from '../providers/image/image';
 import {OverviewPage} from "../pages/overview/overview";
 import {EmployeePage} from "../pages/employee/employee";
 import {ChatPage} from "../pages/chat/chat";
+import {SettingsPage} from "../pages/settings/settings";
+import {EditinfoPage} from "../pages/editinfo/editinfo";
+import {ConversationPage} from "../pages/conversation/conversation";
+import {ProfilePage} from "../pages/profile/profile";
 
 export class CameraMock extends Camera {
 
@@ -27,7 +31,11 @@ export class CameraMock extends Camera {
     MyApp,
     OverviewPage,
     EmployeePage,
-    ChatPage
+    ChatPage,
+    SettingsPage,
+    EditinfoPage,
+    ConversationPage,
+    ProfilePage
   ],
   imports: [
     BrowserModule,
@@ -36,13 +44,21 @@ export class CameraMock extends Camera {
   exports: [
     OverviewPage,
     EmployeePage,
-    ChatPage
+    ChatPage,
+    SettingsPage,
+    EditinfoPage,
+    ConversationPage,
+    ProfilePage
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     OverviewPage,
     EmployeePage,
-    ChatPage
+    ChatPage,
+    SettingsPage,
+    EditinfoPage,
+    ConversationPage,
+    ProfilePage
   ],
   providers: [
     StatusBar,
