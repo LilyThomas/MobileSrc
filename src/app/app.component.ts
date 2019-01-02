@@ -20,7 +20,8 @@ export class MyApp {
     });
 
     this.pages = [
-      { title: 'HomePage', component: 'HomePage' }
+      { title: 'HomePage', component: 'HomePage' },
+      { title: 'Employees', component: 'EmployeePage' }
     ];
 
   }

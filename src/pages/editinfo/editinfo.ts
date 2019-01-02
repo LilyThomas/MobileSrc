@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import {OverviewPage} from "../overview/overview";
+import {ProfilePage} from "../profile/profile";
 
 @IonicPage()
 @Component({
@@ -9,14 +10,14 @@ import {OverviewPage} from "../overview/overview";
 })
 export class EditinfoPage {
 
-  overviewpage=OverviewPage;
+  profilepage=ProfilePage;
 
   constructor(
     public navCtrl: NavController,
   ) {}
 
   saveInfo(){
-    this.navCtrl.setRoot(this.overviewpage);
+    this.navCtrl.setRoot(this.profilepage);
   }
 
 }

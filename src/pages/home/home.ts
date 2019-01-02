@@ -62,4 +62,16 @@ export class HomePage {
   goToOverview(){
     this.navCtrl.setRoot(this.overviewPage);
   }
+
+  notLiked(){
+
+  }
+
+  liked(){
+
+  }
+
+  goToProfile(animal){
+
+  }
 }
