@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EmployeeProvider } from './../../providers/employee/employee';
 import {EmployeePage} from "../employee/employee";
 import {OverviewPage} from "../overview/overview";
@@ -16,14 +16,19 @@ export class HomePage {
 
   private animals;
 
+  id:any;
+
   overviewPage=OverviewPage;
   chatPage=ChatPage;
 
   constructor(
     public navCtrl: NavController,
-    public modalCtrl: ModalController,
+    public navParams: NavParams,
     public aniProv: AnimalProvider
-  ) {}
+  ) {
+    this.id = navParams.get('id');
+    console.log(this.id);
+  }
 
   ionViewDidEnter() {
       this.aniProv.createPouchDB();
