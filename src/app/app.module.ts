@@ -16,6 +16,7 @@ import {SettingsPage} from "../pages/settings/settings";
 import {EditinfoPage} from "../pages/editinfo/editinfo";
 import {ConversationPage} from "../pages/conversation/conversation";
 import {ProfilePage} from "../pages/profile/profile";
+import {AnimalProvider} from "../providers/animals/animals";
 
 export class CameraMock extends Camera {
 
@@ -68,7 +69,8 @@ export class CameraMock extends Camera {
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     SQLite,
     EmployeeProvider,
-    ImageProvider
+    ImageProvider,
+    AnimalProvider
   ]
 })
 export class AppModule {}

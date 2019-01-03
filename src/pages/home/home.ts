@@ -4,6 +4,8 @@ import { EmployeeProvider } from './../../providers/employee/employee';
 import {EmployeePage} from "../employee/employee";
 import {OverviewPage} from "../overview/overview";
 import {ChatPage} from "../chat/chat";
+import {AnimalProvider} from "../../providers/animals/animals";
+import {normalizeURL} from "ionic-angular";
 
 @IonicPage()
 @Component({
@@ -12,7 +14,7 @@ import {ChatPage} from "../chat/chat";
 })
 export class HomePage {
 
-  private employees;
+  private animals;
 
   overviewPage=OverviewPage;
   chatPage=ChatPage;
@@ -20,40 +22,54 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
-    public empProv: EmployeeProvider
+    public aniProv: AnimalProvider
   ) {}
 
   ionViewDidEnter() {
-      this.empProv.createPouchDB();
+      this.aniProv.createPouchDB();
 
-      this.empProv.read()
-        .then(employees => {
-          this.employees = employees;
+      this.aniProv.read()
+        .then(animals => {
+          this.animals = animals;
+          console.log(animals);
         }).catch((err) => { console.log(err)} );
   }
 
-  showDetails(employee) {
-    let modal = this.modalCtrl.create('EmployeePage', { employee: employee });
-    modal.onDidDismiss(data => {
-      this.reReadEmployees();
-    });
-    modal.present();
+  getFirstKeys(obj) {
+    return Object.keys(obj)[0];
   }
 
-  addEmployee() {
-    let modal = this.modalCtrl.create('EmployeePage', { employee: null });
-    modal.onDidDismiss(data => {
-      this.reReadEmployees()
-    });
-    modal.present();
+  getImageUrl(obj) {
+    try{
+      return this.aniProv.remote + "/" + obj.doc._id + "/" + Object.keys(obj.doc._attachments)[0];
+    } catch (e){
+      return normalizeURL("assets/imgs/profile.jpg");
+    }
+
   }
 
-  reReadEmployees() {
-   this.empProv.read()
-     .then(employees => {
-       this.employees = employees;
-     }).catch((err) => { console.log(err)} );
-  }
+  // showDetails(employee) {
+  //   let modal = this.modalCtrl.create('EmployeePage', { employee: employee });
+  //   modal.onDidDismiss(data => {
+  //     this.reReadEmployees();
+  //   });
+  //   modal.present();
+  // }
+  //
+  // addEmployee() {
+  //   let modal = this.modalCtrl.create('EmployeePage', { employee: null });
+  //   modal.onDidDismiss(data => {
+  //     this.reReadEmployees()
+  //   });
+  //   modal.present();
+  // }
+  //
+  // reReadEmployees() {
+  //  this.empProv.read()
+  //    .then(employees => {
+  //      this.employees = employees;
+  //    }).catch((err) => { console.log(err)} );
+  // }
 
   goToChat(){
     this.navCtrl.setRoot(this.chatPage);

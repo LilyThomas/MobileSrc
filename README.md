@@ -4,7 +4,6 @@ MobileSrc
 To Do:
 -------
 ALGEMEEN:
-- Database opzetten
 - Database - database vullen met namen, leeftijd en foto's van dieren
 
 HOMEPAGE:

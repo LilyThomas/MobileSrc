@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { EmployeeProvider } from './../../providers/employee/employee';
 import { ImageProvider } from './../../providers/image/image';
+import {AnimalProvider} from "../../providers/animals/animals"
 
 @IonicPage()
 @Component({
@@ -11,53 +12,52 @@ import { ImageProvider } from './../../providers/image/image';
 
 export class EmployeePage {
 
-  private employee: any = {};
+  private animal: any = {};
   private canDelete = false;
   private canUpdate = false;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private empProv: EmployeeProvider,
+    private aniProv: AnimalProvider,
     public viewCtrl: ViewController,
     public imgProv: ImageProvider
   ) {}
 
   ionViewDidEnter() {
-    var employee = this.navParams.get('employee');
-    if (employee) {
-      this.employee = employee.doc;
+    var animal = this.navParams.get('animal');
+    if (animal) {
+      this.animal = animal.doc;
       this.canDelete = true;
       this.canUpdate = true;
     }
   }
 
   addOrUpdate() {
-    if (this.employee.firstName != undefined && this.employee.lastName != undefined) {
+    if (this.animal.firstName != undefined && this.animal.lastName != undefined) {
       if (this.canUpdate) {
-        this.empProv.update(this.employee);
+        this.aniProv.update(this.animal);
       }
       else {
-        this.empProv.create(this.employee);
+        this.aniProv.create(this.animal);
       }
     }
-    this.viewCtrl.dismiss(this.employee);
+    this.viewCtrl.dismiss(this.animal);
   }
 
   delete() {
-    this.empProv.delete(this.employee);
-    this.viewCtrl.dismiss(this.employee);
+    this.aniProv.delete(this.animal);
+    this.viewCtrl.dismiss(this.animal);
   }
 
   takePhotograph() {
     this.imgProv.takePhotograph()
       .then((image) => {
-         this.employee._attachments = { 'pic.png': {
+         this.animal._attachments = { 'pic.png': {
              content_type: 'image/png',
              data: image.toString()
           }
          }
-         console.log(this.employee);
       })
       .catch((err) => {
          console.log(err);

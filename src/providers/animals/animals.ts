@@ -35,6 +35,7 @@ export class AnimalProvider {
   }
 
   read() {
+    console.log("hello reader");
     let pdb = this.pdb;
 
     function allDocs() {
@@ -44,8 +45,12 @@ export class AnimalProvider {
           return docs.rows;
         });
 
+      console.log(_animals);
+      console.log(Promise.resolve(_animals));
+
       return Promise.resolve(_animals);
     };
+
     return allDocs();
   }
 }
