@@ -45,11 +45,5 @@ export class OverviewPage {
     this.navCtrl.setRoot(this.editinfopage);
   }
 
-  goToCamera(){
-
-
-  }
-
-
 
 }
