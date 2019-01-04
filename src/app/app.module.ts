@@ -22,6 +22,7 @@ import {RegisterPage} from "../pages/register/register";
 import {File} from "@ionic-native/file";
 import {Transfer} from "@ionic-native/transfer";
 import {HttpClientModule} from "@angular/common/http";
+import {MatchProvider} from "../providers/matches/matches";
 
 export class CameraMock extends Camera {
 
@@ -84,7 +85,8 @@ export class CameraMock extends Camera {
     ImageProvider,
     AnimalProvider,
     File,
-    Transfer
+    Transfer,
+    MatchProvider
   ]
 })
 export class AppModule {}

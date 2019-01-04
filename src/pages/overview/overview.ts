@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {HomePage} from "../home/home";
-import {EmployeePage} from "../employee/employee"
 import {SettingsPage} from "../settings/settings";
 import {EditinfoPage} from "../editinfo/editinfo";
 import {ProfilePage} from "../profile/profile";
@@ -14,7 +13,7 @@ import {normalizeURL} from "ionic-angular";
 })
 export class OverviewPage {
 
-  private employees;
+  id: any;
 
   homepage=HomePage;
   settingspage=SettingsPage;
@@ -27,22 +26,25 @@ export class OverviewPage {
 
   constructor(
     public navCtrl: NavController,
-  ) {}
+    public navParams: NavParams
+  ) {
+    this.id = this.navParams.get('id');
+  }
 
   goToHome(){
-    this.navCtrl.setRoot(this.homepage);
+    this.navCtrl.setRoot(this.homepage, {id: this.id});
   }
 
   goToProfile(){
-    this.navCtrl.setRoot(this.profilepage);
+    this.navCtrl.setRoot(this.profilepage, {id: this.id});
   }
 
   GoToSettings(){
-    this.navCtrl.setRoot(this.settingspage);
+    this.navCtrl.setRoot(this.settingspage, {id: this.id});
   }
 
   GoToEditProfile(){
-    this.navCtrl.setRoot(this.editinfopage);
+    this.navCtrl.setRoot(this.editinfopage, {id: this.id});
   }
 
 

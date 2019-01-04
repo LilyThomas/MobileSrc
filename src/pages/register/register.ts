@@ -32,18 +32,18 @@ export class RegisterPage {
 
   nameTaken = false;
   passNotMatched = false;
-  img1:any;
-  imgData:any;
-  type:string;
+  img1: any;
+  imgData: any;
+  type: string;
+  imgName: string;
 
-  constructor(
-    public navCtrl: NavController,
-    public aniProv: AnimalProvider,
-    public transfer: Transfer,
-    public file: File,
-    public camera: Camera,
-    public http: HttpClient
-  ) {}
+  constructor(public navCtrl: NavController,
+              public aniProv: AnimalProvider,
+              public transfer: Transfer,
+              public file: File,
+              public camera: Camera,
+              public http: HttpClient) {
+  }
 
   ionViewDidEnter() {
     this.aniProv.createPouchDB();
@@ -52,47 +52,43 @@ export class RegisterPage {
       .then(animals => {
         this.animals = animals;
         console.log(animals);
-      }).catch((err) => { console.log(err)} );
+      }).catch((err) => {
+      console.log(err)
+    });
   }
 
-  onFileSelected(event){
-    if(event.target.files && event.target.files[0]){
+  onFileSelected(event) {
+    if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
 
-      reader.onload = (event:any) => {
+      this.imgName = event.target.files[0].name;
+
+      reader.onload = (event: any) => {
         this.img1 = event.target.result;
-        console.log("onload");
+
         let data = this.img1.split(",");
         this.imgData = data[1];
-        console.log(this.imgData);
+        data[0] = data[0].split(':')[1];
+        this.type = data[0].split(';')[0];
       }
       reader.readAsDataURL(event.target.files[0]);
     }
-    // let fileList: FileList = event.target.files;
-    // let file: File = fileList[0];
-    // console.log(file);
-    //
-    // console.log("this.img1");
-    // console.log(this.img1);
-
-
   }
 
-
-  register(){
-    console.log("register entered");
+  register() {
     this.passNotMatched = false;
     this.nameTaken = false;
-    for(let animal of this.animals){
-      if(animal.doc.name == this.name){
+    for (let animal of this.animals) {
+      if (animal.doc.name == this.name) {
         console.log("if entered");
         this.nameTaken = true;
       }
     }
-    if(!this.nameTaken){
-      if(this.password != this.repeatPassword){
+
+    if (!this.nameTaken) {
+      if (this.password != this.repeatPassword) {
         this.passNotMatched = true;
-      } else{
+      } else {
         console.log(this.lookingfor);
         let newAnimal =
           {
@@ -103,63 +99,15 @@ export class RegisterPage {
             "lookingfor": this.lookingfor,
             "description": "",
             "_attachments": {
-              "image": {
-                "content_type": "image/jpeg",
+              "image" : {
+                "content_type": this.type,
                 "data": this.imgData
               }
             }
           };
         this.aniProv.create(newAnimal);
-        this.uploadImage();
         this.navCtrl.setRoot(this.loginpage);
       }
     }
   }
-
-  uploadImage(){
-
-    // console.log("upload image");
-    // this.selectedFile = "/Users/lily/Pictures/sunyu-382788-unsplash.jpg";
-    // console.log(this.selectedFile);
-    // let reader = new FileReader();
-    // let test = reader.readAsBinaryString(this.selectedFile, this.selectedFile);
-    // console.log(test);
-    // let id;
-    // for(let animal of this.animals){
-    //   if(animal.name == name){
-    //     id = animal.name._id;
-    //   }
-    // }
-    // if(this.selectedFile) {
-    //   console.log(id);
-    //   const fd = new FormData();
-    //   fd.append('image', this.selectedFile, this.selectedFile.name);
-    //   this.http.post(this.aniProv.remote + "/" + id + "/", fd)
-    //     .subscribe(res => {
-    //       console.log(res)
-    //     });
-    // } else{
-    //   console.log(this.selectedFile);
-    // }
-    //
-    // let options: FileUploadOptions = {
-    //   fileKey: 'file',
-    //   fileName: this.selectedFile.name,
-    //   mimeType: this.selectedFile.type,
-    //   headers: {}
-    // }
-    //
-    // console.log("Transfer");
-    // console.log(this.selectedFile);
-    // console.log(this.aniProv.remote + "/" + id + "/");
-    // console.log(options);
-    //
-    // this.fileTransfer.upload(this.selectedFile, this.aniProv.remote + "/" + id + "/", options);
-    //   .then((data) => {
-    //     // success
-    //   }, (err) => {
-    //     // error
-    //   });
-  }
-
 }

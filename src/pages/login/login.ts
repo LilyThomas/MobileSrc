@@ -31,7 +31,6 @@ export class LoginPage {
     this.aniProv.read()
       .then(animals => {
         this.animals = animals;
-        console.log(animals);
       }).catch((err) => { console.log(err)} );
   }
 
@@ -40,7 +39,6 @@ export class LoginPage {
     for(let animal of this.animals){
       if(animal.doc.name == this.name && animal.doc.password == this.password){
         id = animal.doc._id;
-        console.log("id: " + id);
         this.goToHomepage(id);
       }
     }

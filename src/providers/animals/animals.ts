@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import PouchDB from 'pouchdb';
+import PouchDBFind from 'pouchdb-find';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class AnimalProvider {
@@ -8,6 +10,7 @@ export class AnimalProvider {
   public pdb;
   public remote;
   public animals;
+  public seen;
 
   createPouchDB() {
     this.pdb = new PouchDB('animals');
@@ -20,6 +23,10 @@ export class AnimalProvider {
     };
 
     this.pdb.sync(this.remote, options);
+  }
+
+  constructor(public http: HttpClient){
+    PouchDB.plugin(PouchDBFind);
   }
 
   create(animal) {
@@ -35,7 +42,6 @@ export class AnimalProvider {
   }
 
   read() {
-    console.log("hello reader");
     let pdb = this.pdb;
 
     function allDocs() {
@@ -44,9 +50,7 @@ export class AnimalProvider {
         .then(docs => {
           return docs.rows;
         });
-
-      console.log(_animals);
-      console.log(Promise.resolve(_animals));
+      ;
 
       return Promise.resolve(_animals);
     };
@@ -54,5 +58,41 @@ export class AnimalProvider {
     return allDocs();
   }
 
+  getAnimalRandomBatch(id, seenIdsPromise){
 
+    let randomBatchPromise:any;
+    let pdb = this.pdb;
+
+    randomBatchPromise = seenIdsPromise.then(function(result){
+      let answeredIds: any = [];
+      for(let seen of result.docs){
+        console.log(seen);
+        if(seen.animalId1 == id && typeof seen.match1 != 'undefined'){
+          answeredIds.push(seen.animalId2);
+        }
+        else if(seen.animalId2 == id && typeof seen.match2 != 'undefined'){
+          answeredIds.push(seen.animalId1);
+        }
+      }
+      console.log("this.pdb.find");
+
+      let _randomBatchPromise = pdb.find({
+        selector: {
+          $and: [
+            {_id: {$ne: id}},
+            {_id: {$nin: answeredIds}}
+          ]
+        }
+      })
+      return _randomBatchPromise;
+    });
+
+
+    //   .then(function(result) {
+    //   console.log(seen);
+    //   console.log(result.docs);
+    // })
+
+    return randomBatchPromise;
+  }
 }
