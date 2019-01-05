@@ -31,7 +31,6 @@ EDIT INFO:
 - layout prep
 - Foto's kunnen toegevoegd worden aan db (met camera?)
 - Korte beschrijving kan toegevoegd worden (toevoegen aan db)
-- Geslacht aanduiden (bij ons - hond of kat)
 - Kiezen voor leeftijd te tonen (boolean knop o= - does this make sense?)
 
 SETTINGS:
@@ -39,7 +38,6 @@ SETTINGS:
 - Locatie invullen
 - Age range slider
 - gender slider
-- distance slider ???
 
 CHAT:
 - Lijst van matches

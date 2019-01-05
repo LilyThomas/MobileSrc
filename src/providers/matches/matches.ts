@@ -72,13 +72,13 @@ export class MatchProvider {
       if(result.docs.length != 0){
         let match = result.docs[0];
         match.match2 = answer;
-        //this.update(match);
+        this.update(match);
       } else{
         let match: any = {};
         match.animalId1 = id;
         match.animalId2 = otherId;
         match.match1 = answer;
-        //this.create(match);
+        this.create(match);
       }
     })
   }
