@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController } from 'ionic-angular';
-import {HomePage} from "../home/home";
-import {EmployeePage} from "../employee/employee";
-import {ChatPage} from "../chat/chat";
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import {OverviewPage} from "../overview/overview";
 
 @IonicPage()
@@ -14,11 +12,16 @@ export class ProfilePage {
 
   overviewpage=OverviewPage;
 
+  id:any;
+
   constructor(
     public navCtrl: NavController,
-  ) {}
+    public navParams: NavParams
+  ) {
+    this.id = navParams.get('id');
+  }
 
   returnToOverview(){
-    this.navCtrl.setRoot(this.overviewpage);
+    this.navCtrl.setRoot(this.overviewpage, {id: this.id});
   }
 }

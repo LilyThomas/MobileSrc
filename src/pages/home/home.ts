@@ -20,7 +20,7 @@ export class HomePage {
 
   id:any;
   index:any = 0;
-  seen:any;
+  unseenAnimals: any = [];
 
   overviewPage=OverviewPage;
   chatPage=ChatPage;
@@ -35,30 +35,48 @@ export class HomePage {
   }
 
   ionViewDidEnter() {
+    // let unseenAnimals = this.unseenAnimals;
+
+    console.log("welcome to the homepage");
     this.matchProv.createPouchDB();
     this.aniProv.createPouchDB();
+    this.getNextAnimalBatch();
+    //
+    // this.aniProv.read()
+    //   .then(animals => {
+    //     this.animals = animals;
+    //   }).catch((err) => { console.log(err)} );
+  }
 
-    this.aniProv.read()
-      .then(animals => {
-        this.animals = animals;
-      }).catch((err) => { console.log(err)} );
-
+  getNextAnimalBatch(){
     let seenIdsPromise = this.matchProv.getSeenIds(this.id);
     let randomBatchPromise = this.aniProv.getAnimalRandomBatch(this.id, seenIdsPromise);
 
-    randomBatchPromise.then(function(result) {
-        console.log(result.docs);
-      })
+    randomBatchPromise.then((result:any) => {
+      this.unseenAnimals = this.unseenAnimals.concat(result.docs);
+    })
+  }
 
-    // this.aniProv.getAnimalRandomBatch(this.id, this.matchProv);
+  getAnimalsOneByOneName(){
+    if(this.unseenAnimals.length != 0){
+      return this.unseenAnimals[0].name + ", [" + this.unseenAnimals[0].age + "]";
+    }
+    return "No animals found :(";
+  }
 
+  getAnimalOneByOnePicture(){
+    if(this.unseenAnimals.length != 0){
+      return this.getImageUrl(this.unseenAnimals[0]);
+    } else{
+      return normalizeURL("assets/imgs/flame.jpg");
+    }
   }
 
   // getFirstKeys(obj) {
   //   return Object.keys(obj)[0];
   // }
 
-  getAnimalsOneByOne(){
+  // getAnimalsOneByOne(){
 
     // if(current._id == this.id) {
     //   current = this.animals[this.getNextIndex()];
@@ -70,7 +88,7 @@ export class HomePage {
     //   console.log(this.animals[0]);
     //
     // }
-  }
+  // }
 
   // getNextIndex(){
   //   if(this.index == this.animals.length()){
@@ -81,13 +99,13 @@ export class HomePage {
   //   return this.index;
   // }
 
-  // getImageUrl(obj) {
-  //   try{
-  //     return this.aniProv.remote + "/" + obj.doc._id + "/" + Object.keys(obj.doc._attachments)[0];
-  //   } catch (e){
-  //     return normalizeURL("assets/imgs/profile.jpg");
-  //   }
-  // }
+  getImageUrl(obj) {
+    try{
+      return this.aniProv.remote + "/" + obj._id + "/" + Object.keys(obj._attachments)[0];
+    } catch (e){
+      return normalizeURL("assets/imgs/logo.jpg");
+    }
+  }
 
   // showDetails(employee) {
   //   let modal = this.modalCtrl.create('EmployeePage', { employee: employee });
@@ -112,7 +130,7 @@ export class HomePage {
   //    }).catch((err) => { console.log(err)} );
   // }
 
-  
+
 
   goToChat(){
     this.navCtrl.setRoot(this.chatPage, {id: this.id});
@@ -123,12 +141,17 @@ export class HomePage {
   }
 
   notLiked(){
-
+    if(this.unseenAnimals.length != 0){
+      this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, false);
+      this.unseenAnimals.shift();
+    }
   }
 
   liked(){
-    // this.getAnimalsOneByOne();
-    // console.log(this.getAnimalsOneByOne().doc.name);
+    if(this.unseenAnimals.length != 0){
+      this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, true);
+      this.unseenAnimals.shift();
+    }
   }
 
   goToProfile(animal){

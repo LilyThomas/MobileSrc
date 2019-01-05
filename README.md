@@ -3,20 +3,19 @@ MobileSrc
 
 To Do:
 -------
-ALGEMEEN:
-- Database - database vullen met namen, leeftijd en foto's van dieren
 
 HOMEPAGE:
-- swipecards (foto's ophalen uit database)
-- knoppen van not (X) or like (V)
-- Indien niemand gevonden - afbeelding van niemand gevonden
-- Match
+V swipecards (foto's ophalen uit database)
+V knoppen van not (X) or like (V)								
+V Indien niemand gevonden - afbeelding van niemand gevonden
+N Match - Geen notificatie genereren - out of scope - gwn in lijst in chat
+- Filteren op voorkeuren
 
 OVERVIEW:
-- foto ophalen uit database
+V foto ophalen uit database
 - camera knop ==> foto toevoegen aan database
-- Naam ophalen uit database
-- leeftijd ophalen uit database
+V Naam ophalen uit database
+V leeftijd ophalen uit database
 
 
 PROFIEL: - andere hun profiel moet er juist hetzelfde uitzien, maar moeten meegeven dat het een andere profiel is voor terug te gaan naar de juiste pagina
@@ -46,9 +45,12 @@ CHAT:
 - Lijst van matches
 
 CONVERSATIE:
+- 3de database
 - chat met het dier
 - kan naar typen
-- antwoord binnen gegeven tijdspanne met lorem ipsum?
+
+MATCHES:
+V 2de database
 
 
 

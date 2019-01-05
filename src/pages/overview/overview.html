@@ -28,16 +28,14 @@
     <p text-center >
       <ion-buttons>
         <button (click)="goToProfile()" >
-          <img src='{{tempImagePath}}'>
+          <img src='{{getPicture()}}'>
         </button>
       </ion-buttons>
     </p>
   </div>
 
   <div>
-    <p text-center>
-      Twinkel, 8
-    </p>
+    <h3>{{getNameAndAge()}}</h3>
   </div>
 
   <div>
