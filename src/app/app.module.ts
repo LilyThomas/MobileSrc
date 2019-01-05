@@ -17,6 +17,12 @@ import {EditinfoPage} from "../pages/editinfo/editinfo";
 import {ConversationPage} from "../pages/conversation/conversation";
 import {ProfilePage} from "../pages/profile/profile";
 import {AnimalProvider} from "../providers/animals/animals";
+import {HomePage} from "../pages/home/home";
+import {RegisterPage} from "../pages/register/register";
+import {File} from "@ionic-native/file";
+import {Transfer} from "@ionic-native/transfer";
+import {HttpClientModule} from "@angular/common/http";
+import {MatchProvider} from "../providers/matches/matches";
 
 export class CameraMock extends Camera {
 
@@ -36,10 +42,13 @@ export class CameraMock extends Camera {
     SettingsPage,
     EditinfoPage,
     ConversationPage,
-    ProfilePage
+    ProfilePage,
+    HomePage,
+    RegisterPage
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   exports: [
@@ -49,7 +58,9 @@ export class CameraMock extends Camera {
     SettingsPage,
     EditinfoPage,
     ConversationPage,
-    ProfilePage
+    ProfilePage,
+    HomePage,
+    RegisterPage
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,18 +70,23 @@ export class CameraMock extends Camera {
     SettingsPage,
     EditinfoPage,
     ConversationPage,
-    ProfilePage
+    ProfilePage,
+    HomePage,
+    RegisterPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    //Camera,
+    Camera,
     { provide: Camera, useClass: CameraMock },
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     SQLite,
     EmployeeProvider,
     ImageProvider,
-    AnimalProvider
+    AnimalProvider,
+    File,
+    Transfer,
+    MatchProvider
   ]
 })
 export class AppModule {}
