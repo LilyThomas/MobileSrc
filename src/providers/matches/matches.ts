@@ -47,35 +47,40 @@ export class MatchProvider {
   getSeenIds(id){
     // let answeredIds: any = [];
 
-    let _seenIdsPromise = this.pdb.find({
+    let pdb = this.pdb;
+
+    let _seenIdsPromise = pdb.find({
       selector: {
         $or : [
           {animalId1: id}, {animalId2: id}
         ]
       }
     });
-    // .then(function(result){
-    //   let answeredIds: any = [];
-    //   for(let seen of result.docs){
-    //     console.log(seen);
-    //     if(seen.animalId1 == id && typeof seen.match1 != 'undefined'){
-    //       answeredIds.push(seen.animalId2);
-    //     }
-    //     else if(seen.animalId2 == id && typeof seen.match2 != 'undefined'){
-    //       answeredIds.push(seen.animalId1);
-    //     }
-    //   }
-    //   console.log("this.pdb.find");
-    //   aniProv.getRandomBatch(answeredIds, id);
-    // });
-
-    // Promise.resolve(_match);
-    //
-    // console.log("getSeenIds");
-    // console.log(answeredIds);
-    // console.log(_match);
 
     return _seenIdsPromise;
+  }
+
+  insertAnswer(id, otherId, answer){
+    console.log(id, otherId, answer);
+
+    let pdb = this.pdb;
+
+    let _matchPromise = pdb.find({
+      selector: {animalId1: otherId, animalId2: id}
+    }).then((result) => {
+      console.log(result);
+      if(result.docs.length != 0){
+        let match = result.docs[0];
+        match.match2 = answer;
+        this.update(match);
+      } else{
+        let match: any = {};
+        match.animalId1 = id;
+        match.animalId2 = otherId;
+        match.match1 = answer;
+        this.create(match);
+      }
+    })
   }
 
 }

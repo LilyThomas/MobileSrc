@@ -5,6 +5,7 @@ import {SettingsPage} from "../settings/settings";
 import {EditinfoPage} from "../editinfo/editinfo";
 import {ProfilePage} from "../profile/profile";
 import {normalizeURL} from "ionic-angular";
+import {AnimalProvider} from "../../providers/animals/animals";
 
 @IonicPage()
 @Component({
@@ -14,6 +15,7 @@ import {normalizeURL} from "ionic-angular";
 export class OverviewPage {
 
   id: any;
+  animal:any;
 
   homepage=HomePage;
   settingspage=SettingsPage;
@@ -26,9 +28,28 @@ export class OverviewPage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public aniProv: AnimalProvider
   ) {
+    this.aniProv.createPouchDB();
     this.id = this.navParams.get('id');
+
+    this.aniProv.findAnimalById(this.id).then((result) => {
+      this.animal = result.docs[0];
+      console.log(this.animal);
+    });
+  }
+
+  getNameAndAge(){
+    if(typeof this.animal != "undefined") {
+      return this.animal.name + ", [" + this.animal.age + "]";
+    }
+  }
+
+  getPicture(){
+    if(typeof this.id != "undefined" && typeof this.animal != "undefined") {
+      return this.aniProv.remote + "/" + this.id + "/" + Object.keys(this.animal._attachments)[0];
+    }
   }
 
   goToHome(){

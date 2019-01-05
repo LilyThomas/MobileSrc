@@ -87,12 +87,12 @@ export class AnimalProvider {
       return _randomBatchPromise;
     });
 
-
-    //   .then(function(result) {
-    //   console.log(seen);
-    //   console.log(result.docs);
-    // })
-
     return randomBatchPromise;
+  }
+
+  findAnimalById(id){
+    return this.pdb.find({
+      selector:{ _id: id}
+    });
   }
 }
