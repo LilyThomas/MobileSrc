@@ -28,15 +28,20 @@
 
 <ion-content padding>
 
-  <!--<ion-list>-->
-    <!--<h3>names</h3>-->
-    <!--<ion-item *ngFor='let animal of animals'>-->
-      <!--<div>-->
-        <!--<img src='{{getImageUrl(animal)}}'/>-->
-        <!--<h3>{{animal.doc.name}} , {{animal.doc.age}}</h3>-->
-      <!--</div>-->
-    <!--</ion-item>-->
-  <!--</ion-list>-->
+  <ion-list>
+    <h3>names</h3>
+    <!--<h3>{{Object.keys({'a': 'b'})}}</h3>-->
+    <ion-item *ngFor='let animal of animals'>
+      <div>
+        <!--<img src="http://localhost:5984/animals/28fc4d01e9a5ef9206c7faa6ee003037/sunyu-382788-unsplash.jpg"/>-->
+        <img src='{{getImageUrl(animal)}}'/>
+        <h3>{{animal.doc.name}} , {{animal.doc.age}}</h3>
+      </div>
+    </ion-item>
+  </ion-list>
+
+
+
 
   <div>
     <ion-grid>

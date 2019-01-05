@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import {HomePage} from "../home/home";
 import {SettingsPage} from "../settings/settings";
 import {EditinfoPage} from "../editinfo/editinfo";
 import {ProfilePage} from "../profile/profile";
 import {normalizeURL} from "ionic-angular";
+
+import {Camera, CameraOptions} from "@ionic-native/camera";
 
 @IonicPage()
 @Component({
@@ -13,7 +15,7 @@ import {normalizeURL} from "ionic-angular";
 })
 export class OverviewPage {
 
-  id: any;
+  private employees;
 
   homepage=HomePage;
   settingspage=SettingsPage;
@@ -26,26 +28,43 @@ export class OverviewPage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams
-  ) {
-    this.id = this.navParams.get('id');
-  }
+    private camera: Camera
+  ) {}
 
   goToHome(){
-    this.navCtrl.setRoot(this.homepage, {id: this.id});
+    this.navCtrl.setRoot(this.homepage);
   }
 
   goToProfile(){
-    this.navCtrl.setRoot(this.profilepage, {id: this.id});
+    this.navCtrl.setRoot(this.profilepage);
   }
 
   GoToSettings(){
-    this.navCtrl.setRoot(this.settingspage, {id: this.id});
+    this.navCtrl.setRoot(this.settingspage);
   }
 
   GoToEditProfile(){
-    this.navCtrl.setRoot(this.editinfopage, {id: this.id});
+    this.navCtrl.setRoot(this.editinfopage);
   }
 
+  OpenCamera(){
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64 (DATA_URL):
+      let base64Image = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+      // Handle error
+    });
+
+
+  }
 
 }
