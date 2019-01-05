@@ -17,6 +17,7 @@ export class MatchProvider {
   constructor(
     public http: HttpClient) {
     PouchDB.plugin(PouchDBFind);
+
   }
 
   createPouchDB() {
