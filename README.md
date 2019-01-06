@@ -5,17 +5,16 @@ To Do:
 -------
 
 HOMEPAGE:
-V swipecards (foto's ophalen uit database)
-V knoppen van not (X) or like (V)								
-V Indien niemand gevonden - afbeelding van niemand gevonden
-N Match - Geen notificatie genereren - out of scope - gwn in lijst in chat
-- Filteren op voorkeuren
+- V swipecards (foto's ophalen uit database)
+- V knoppen van not (X) or like (V)								
+- V Indien niemand gevonden - afbeelding van niemand gevonden
+- +/- Filteren op voorkeuren //TODO - lookingfor voorkeur
 
 OVERVIEW:
-V foto ophalen uit database
+- V foto ophalen uit database
 - camera knop ==> foto toevoegen aan database
-V Naam ophalen uit database
-V leeftijd ophalen uit database
+- V Naam ophalen uit database
+- V leeftijd ophalen uit database
 
 
 PROFIEL: - andere hun profiel moet er juist hetzelfde uitzien, maar moeten meegeven dat het een andere profiel is voor terug te gaan naar de juiste pagina
@@ -48,7 +47,7 @@ CONVERSATIE:
 - kan naar typen
 
 MATCHES:
-V 2de database
+- V 2de database
 
 
 

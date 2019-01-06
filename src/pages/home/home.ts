@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { EmployeeProvider } from './../../providers/employee/employee';
-import {EmployeePage} from "../employee/employee";
 import {OverviewPage} from "../overview/overview";
 import {ChatPage} from "../chat/chat";
 import {AnimalProvider} from "../../providers/animals/animals";
@@ -16,11 +14,12 @@ import {MatchProvider} from "../../providers/matches/matches";
 export class HomePage {
 
   private animals;
-  private matches;
+  private matches: any = [];
 
   id:any;
   index:any = 0;
   unseenAnimals: any = [];
+  animal;
 
   overviewPage=OverviewPage;
   chatPage=ChatPage;
@@ -32,28 +31,42 @@ export class HomePage {
     public matchProv: MatchProvider
   ) {
     this.id = navParams.get('id');
+    this.matchProv.createPouchDB();
+    this.aniProv.createPouchDB();
+    aniProv.findAnimalById(this.id).then((result:any) => {
+      this.animal = result.docs[0];
+      this.getNextAnimalBatch(0.05);
+    });
   }
 
   ionViewDidEnter() {
-    // let unseenAnimals = this.unseenAnimals;
 
-    console.log("welcome to the homepage");
-    this.matchProv.createPouchDB();
-    this.aniProv.createPouchDB();
-    this.getNextAnimalBatch();
-    //
-    // this.aniProv.read()
-    //   .then(animals => {
-    //     this.animals = animals;
-    //   }).catch((err) => { console.log(err)} );
   }
 
-  getNextAnimalBatch(){
+  getNextAnimalBatch(range){
+    console.log(this.animal);
     let seenIdsPromise = this.matchProv.getSeenIds(this.id);
-    let randomBatchPromise = this.aniProv.getAnimalRandomBatch(this.id, seenIdsPromise);
+    let randomBatchPromise = this.aniProv.getAnimalRandomBatch(this.id, seenIdsPromise, this.matches, range, this.animal);
 
     randomBatchPromise.then((result:any) => {
-      this.unseenAnimals = this.unseenAnimals.concat(result.docs);
+      if(result.docs.length > 0) {
+        // this.unseenAnimals = Array.from(new Set(this.unseenAnimals.concat(result.docs)));
+        for(let animal of result.docs) {
+          let found = false;
+          for(let unseenAnimal of this.unseenAnimals) {
+            if(animal._id == unseenAnimal._id){
+              found = true;
+            }
+          }
+
+          if(!found) {
+            this.unseenAnimals.push(animal);
+          }
+        }
+      }
+      if(this.unseenAnimals.length < 5 && range <= 1) {
+        this.getNextAnimalBatch(range * 2);
+      }
     })
   }
 
@@ -143,14 +156,22 @@ export class HomePage {
   notLiked(){
     if(this.unseenAnimals.length != 0){
       this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, false);
+      this.matches.push(this.unseenAnimals[0]._id);
       this.unseenAnimals.shift();
+      if(this.unseenAnimals.length < 3) {
+        this.getNextAnimalBatch(0.05)
+      }
     }
   }
 
   liked(){
     if(this.unseenAnimals.length != 0){
       this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, true);
+      this.matches.push(this.unseenAnimals[0]._id);
       this.unseenAnimals.shift();
+      if(this.unseenAnimals.length < 3) {
+        this.getNextAnimalBatch(0.05)
+      }
     }
   }
 

@@ -97,7 +97,10 @@ export class RegisterPage {
             "age": this.age,
             "gender": this.gender,
             "lookingfor": this.lookingfor,
+            "minAge": 1,
+            "maxAge": 20,
             "description": "",
+            "random": Math.random(),
             "_attachments": {
               "image" : {
                 "content_type": this.type,

@@ -49,26 +49,20 @@ export class MatchProvider {
 
     let pdb = this.pdb;
 
-    let _seenIdsPromise = pdb.find({
+    return pdb.find({
       selector: {
         $or : [
           {animalId1: id}, {animalId2: id}
         ]
       }
     });
-
-    return _seenIdsPromise;
   }
 
   insertAnswer(id, otherId, answer){
-    console.log(id, otherId, answer);
 
-    let pdb = this.pdb;
-
-    let _matchPromise = pdb.find({
+    this.pdb.find({
       selector: {animalId1: otherId, animalId2: id}
     }).then((result) => {
-      console.log(result);
       if(result.docs.length != 0){
         let match = result.docs[0];
         match.match2 = answer;
