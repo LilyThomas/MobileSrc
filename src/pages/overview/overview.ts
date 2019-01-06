@@ -20,11 +20,9 @@ export class OverviewPage {
   homepage=HomePage;
   settingspage=SettingsPage;
   editinfopage=EditinfoPage;
-  profilepage=ProfilePage;
 
-  imagePath = "assets/imgs/profile.jpg";
-
-  tempImagePath = normalizeURL(this.imagePath);
+  imageUrl;
+  attachmentsURLS: any = [];
 
   constructor(
     public navCtrl: NavController,
@@ -33,10 +31,10 @@ export class OverviewPage {
   ) {
     this.aniProv.createPouchDB();
     this.id = this.navParams.get('id');
-
+    this.imageUrl = this.aniProv.remote + "/" + this.id + "/";
     this.aniProv.findAnimalById(this.id).then((result) => {
       this.animal = result.docs[0];
-      console.log(this.animal);
+      this.getAttachmentURLS();
     });
   }
 
@@ -46,18 +44,26 @@ export class OverviewPage {
     }
   }
 
-  getPicture(){
+  getDescription(){
+    if(typeof this.animal != "undefined") {
+      return this.animal.description;
+    }
+  }
+
+  getAttachmentURLS(){
     if(typeof this.id != "undefined" && typeof this.animal != "undefined") {
-      return this.aniProv.remote + "/" + this.id + "/" + Object.keys(this.animal._attachments)[0];
+      console.log(this.animal._attachments);
+      console.log(Object.keys(this.animal._attachments));
+      for(let picture of Object.keys(this.animal._attachments)){
+        // console.log(i);
+        console.log(picture);
+        this.attachmentsURLS.push(this.imageUrl + picture) ;
+      }
     }
   }
 
   goToHome(){
     this.navCtrl.setRoot(this.homepage, {id: this.id});
-  }
-
-  goToProfile(){
-    this.navCtrl.setRoot(this.profilepage, {id: this.id});
   }
 
   GoToSettings(){

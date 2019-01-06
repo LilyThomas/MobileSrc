@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController} from 'ionic-angular';
 import {AnimalProvider} from "../../providers/animals/animals";
-import {HomePage} from "../home/home";
 import {LoginPage} from "../login/login";
 import {File} from "@ionic-native/file";
-import {Transfer, TransferObject} from "@ionic-native/transfer";
-import { Camera } from '@ionic-native/camera';
+import {Transfer} from "@ionic-native/transfer";
 import {HttpClient} from "@angular/common/http";
 
 declare var cordova: any;
@@ -18,7 +16,6 @@ declare var cordova: any;
 export class RegisterPage {
 
   private loginpage = LoginPage;
-  private animals;
 
   // private fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -41,20 +38,9 @@ export class RegisterPage {
               public aniProv: AnimalProvider,
               public transfer: Transfer,
               public file: File,
-              public camera: Camera,
-              public http: HttpClient) {
-  }
-
-  ionViewDidEnter() {
+              public http: HttpClient
+  ) {
     this.aniProv.createPouchDB();
-
-    this.aniProv.read()
-      .then(animals => {
-        this.animals = animals;
-        console.log(animals);
-      }).catch((err) => {
-      console.log(err)
-    });
   }
 
   onFileSelected(event) {
@@ -75,42 +61,62 @@ export class RegisterPage {
     }
   }
 
-  register() {
-    this.passNotMatched = false;
+  onNameChange(){
     this.nameTaken = false;
-    for (let animal of this.animals) {
-      if (animal.doc.name == this.name) {
-        console.log("if entered");
+
+    this.aniProv.findAnimalByName(this.name).then((result:any) => {
+      if(result.docs.length > 0){
+        console.log(result.docs.length);
+        console.log(result.docs[0]);
         this.nameTaken = true;
       }
-    }
+    });
+  }
 
-    if (!this.nameTaken) {
+  onPasswordChange() {
+    this.passNotMatched = false;
+
+    if(this.password != null && this.repeatPassword != null){
       if (this.password != this.repeatPassword) {
         this.passNotMatched = true;
-      } else {
-        console.log(this.lookingfor);
-        let newAnimal =
-          {
-            "name": this.name,
-            "password": this.password,
-            "age": this.age,
-            "gender": this.gender,
-            "lookingfor": this.lookingfor,
-            "minAge": 1,
-            "maxAge": 20,
-            "description": "",
-            "random": Math.random(),
-            "_attachments": {
-              "image" : {
-                "content_type": this.type,
-                "data": this.imgData
-              }
-            }
-          };
-        this.aniProv.create(newAnimal);
-        this.navCtrl.setRoot(this.loginpage);
       }
     }
+    if(this.password == null || this.repeatPassword == null){
+      this.passNotMatched = true;
+    }
+    if(this.password == ""){
+      this.passNotMatched = true;
+    }
+    if(this.repeatPassword == ""){
+      this.passNotMatched = true;
+    }
   }
+
+  register(){
+    this.passNotMatched = false;
+    this.nameTaken = false;
+
+    if(! this.passNotMatched && ! this.nameTaken){
+      let newAnimal =
+        {
+          "name": this.name,
+          "password": this.password,
+          "age": this.age,
+          "gender": this.gender,
+          "lookingfor": this.lookingfor,
+          "minAge": 1,
+          "maxAge": 20,
+          "description": "",
+          "random": Math.random(),
+          "_attachments": {
+            "image" : {
+              "content_type": this.type,
+              "data": this.imgData
+            }
+          }
+        };
+      this.aniProv.create(newAnimal);
+      this.navCtrl.setRoot(this.loginpage);
+      }
+    }
 }

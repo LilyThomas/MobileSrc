@@ -4,6 +4,28 @@ MobileSrc
 To Do:
 -------
 
+V PROFIEL: - andere hun profiel moet er juist hetzelfde uitzien, maar moeten meegeven dat het een andere profiel is voor terug te gaan naar de juiste pagina
+- Vlayout prep
+- V toont foto's (uit db)
+- V toont naam (uit db)
+- V toont leeftijd (uit db)
+- V toont (eventueel) kleine beschrijving (uit db)
+- V & X knop
+
+V EDIT INFO:
+- V layout prep
+- V Foto's kunnen toegevoegd worden aan db
+- V Korte beschrijving kan toegevoegd worden (toevoegen aan db)
+
+V SETTINGS:
+- V layout prep
+- V Change password
+- V Age range slider (? or just the preferences)
+- V looking for preference
+
+V MATCHES:
+- V 2de database
+
 HOMEPAGE:
 - V swipecards (foto's ophalen uit database)
 - V knoppen van not (X) or like (V)								
@@ -16,28 +38,6 @@ OVERVIEW:
 - V Naam ophalen uit database
 - V leeftijd ophalen uit database
 
-
-PROFIEL: - andere hun profiel moet er juist hetzelfde uitzien, maar moeten meegeven dat het een andere profiel is voor terug te gaan naar de juiste pagina
-- layout prep
-- toont foto's (uit db)
-- toont naam (uit db)
-- toont leeftijd (uit db)
-- toont (eventueel) kleine beschrijving (uit db)
-- Knop voor edit info
-
-
-EDIT INFO:
-- layout prep
-- Foto's kunnen toegevoegd worden aan db (met camera?)
-- Korte beschrijving kan toegevoegd worden (toevoegen aan db)
-- Kiezen voor leeftijd te tonen (boolean knop o= - does this make sense?)
-
-SETTINGS:
-- layout prep
-- Locatie invullen
-- Age range slider
-- gender slider
-
 CHAT:
 - Lijst van matches
 
@@ -46,8 +46,6 @@ CONVERSATIE:
 - chat met het dier
 - kan naar typen
 
-MATCHES:
-- V 2de database
-
+CSS
 
 

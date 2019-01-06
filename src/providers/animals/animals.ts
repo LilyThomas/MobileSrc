@@ -102,7 +102,7 @@ export class AnimalProvider {
 
           },
           limit: 5,
-          sort: ['random']
+          // sort: ['random']
         });
       }
       else if(lower < 0) {
@@ -125,7 +125,7 @@ export class AnimalProvider {
             ],
           },
           limit: 5,
-          sort: ['random']
+          // sort: ['random']
         });
       }
       else {
@@ -145,7 +145,7 @@ export class AnimalProvider {
             ],
           },
           limit: 5,
-          sort: ['random']
+          // sort: ['random']
         });
       }
       return _randomBatchPromise;
@@ -157,6 +157,12 @@ export class AnimalProvider {
   findAnimalById(id){
     return this.pdb.find({
       selector:{ _id: id}
+    });
+  }
+
+  findAnimalByName(name){
+    return this.pdb.find({
+      selector:{name: name}
     });
   }
 }
