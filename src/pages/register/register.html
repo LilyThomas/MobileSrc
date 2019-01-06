@@ -7,17 +7,17 @@
   <ion-list>
     <ion-item>
       <ion-label>Name:</ion-label>
-      <ion-input type="text" [(ngModel)]="name" placeholder="Name"></ion-input>
+      <ion-input type="text" (change)="onNameChange()" [(ngModel)]="name" placeholder="Name"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Password:</ion-label>
-      <ion-input type="password" [(ngModel)]="password" placeholder="Password"></ion-input>
+      <ion-input type="password" (change)="onPasswordChange()" [(ngModel)]="password" placeholder="Password"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Repeat Password:</ion-label>
-      <ion-input type="password" [(ngModel)]="repeatPassword" placeholder="Repeat Password"></ion-input>
+      <ion-input type="password"(change)="onPasswordChange()" [(ngModel)]="repeatPassword" placeholder="Repeat Password"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -34,7 +34,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>I am looking for:</ion-label>
+      <ion-label >I am looking for:</ion-label>
       <ion-select [(ngModel)]="lookingfor" multiple="true">
         <ion-option value="Dog">Dog</ion-option>
         <ion-option value="Cat">Cat</ion-option>
@@ -44,7 +44,6 @@
     <ion-item>
       <ion-label>Profile Picture</ion-label>
       <ion-input type="file" (change)="onFileSelected($event)"></ion-input>
-      <img *ngIf="img1" [src]="img1"/>
     </ion-item>
 
   <br/>

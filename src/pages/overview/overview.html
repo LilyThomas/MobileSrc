@@ -23,19 +23,14 @@
 </ion-header>
 
 <ion-content>
-
   <div>
-    <p text-center >
-      <ion-buttons>
-        <button (click)="goToProfile()" >
-          <img src='{{getPicture()}}'>
-        </button>
-      </ion-buttons>
-    </p>
-  </div>
-
-  <div>
+    <ion-slides>
+      <ion-slide *ngFor="let url of attachmentsURLS">
+        <img src="{{url}}">
+      </ion-slide>
+    </ion-slides>
     <h3>{{getNameAndAge()}}</h3>
+    <p>{{getDescription()}}</p>
   </div>
 
   <div>
