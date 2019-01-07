@@ -58,6 +58,28 @@ export class AnimalProvider {
     return allDocs();
   }
 
+  getMatchedAnimals(id, findMatchesPromise){
+    let pdb = this.pdb;
+
+    return findMatchesPromise.then(function(result){
+      let matchedId: any = [];
+
+      for(let match of result.docs){
+        if(match.animalId1 == id){
+          matchedId.push(match.animalId2);
+        }
+        else {
+          matchedId.push(match.animalId1);
+        }
+      }
+      return pdb.find({
+        selector: {
+          _id: {$in: matchedId}
+        }
+      });
+    });
+  }
+
   getAnimalRandomBatch(id, seenIdsPromise, seenIds, range, animal){
 
     let randomBatchPromise:any;
