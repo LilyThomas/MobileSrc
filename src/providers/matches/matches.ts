@@ -45,14 +45,13 @@ export class MatchProvider {
   }
 
   getSeenIds(id){
-    // let answeredIds: any = [];
-
     let pdb = this.pdb;
 
     return pdb.find({
       selector: {
         $or : [
-          {animalId1: id}, {animalId2: id}
+          {animalId1: id},
+          {animalId2: id}
         ]
       }
     });
@@ -73,6 +72,23 @@ export class MatchProvider {
         match.animalId2 = otherId;
         match.match1 = answer;
         this.create(match);
+      }
+    })
+  }
+
+  findMatches(id){
+    let pdb = this.pdb;
+
+    return pdb.find({
+      selector:{
+        $and: [
+          {match1: true},
+          {match2: true},
+          {$or:[
+            {animalId1: id},
+            {animalId2: id}
+          ]}
+        ]
       }
     })
   }

@@ -44,15 +44,12 @@ export class HomePage {
 
 
   getNextAnimalBatch(range){
-    console.log(this.animal);
     let seenIdsPromise = this.matchProv.getSeenIds(this.id);
     let randomBatchPromise = this.aniProv.getAnimalRandomBatch(this.id, seenIdsPromise, this.matches, range, this.animal);
 
     randomBatchPromise.then((result:any) => {
       if(result.docs.length > 0) {
-        // this.unseenAnimals = Array.from(new Set(this.unseenAnimals.concat(result.docs)));
         for(let animal of result.docs) {
-          console.log(animal);
           let found = false;
           for(let unseenAnimal of this.unseenAnimals) {
             if(animal._id == unseenAnimal._id){
@@ -65,8 +62,6 @@ export class HomePage {
           }
         }
       }
-      console.log(this.unseenAnimals);
-      console.log(this.unseenAnimals.length);
       if(this.unseenAnimals.length < 6 && range <= 1) {
         this.getNextAnimalBatch(range + 0.2);
       }
@@ -109,16 +104,6 @@ export class HomePage {
     this.navCtrl.setRoot(this.overviewPage, {id: this.id});
   }
 
-  // notLiked(){
-  //   if(this.unseenAnimals.length != 0){
-  //     this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, false);
-  //     this.matches.push(this.unseenAnimals[0]._id);
-  //     this.unseenAnimals.shift();
-  //     if(this.unseenAnimals.length < 3) {
-  //       this.getNextAnimalBatch(0.05)
-  //     }
-  //   }
-  // }
 
   answered(answer){
     if(this.unseenAnimals.length != 0){
