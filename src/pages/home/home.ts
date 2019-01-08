@@ -26,6 +26,7 @@ export class HomePage {
   chatPage=ChatPage;
   profilepage=ProfilePage;
 
+  attachmentsURLS:any=[];
 
   constructor(
     public navCtrl: NavController,
@@ -59,6 +60,8 @@ export class HomePage {
 
           if(!found) {
             this.unseenAnimals.push(animal);
+            // this.getAnimalPictureSlide();
+            this.getAnimalOneByOnePicture();
           }
         }
       }
@@ -70,27 +73,31 @@ export class HomePage {
 
   getAnimalsOneByOneName(){
     if (this.unseenAnimals.length != 0) {
-      console.log(this.unseenAnimals[0].name + ", [" + this.unseenAnimals[0].age + "]");
       return this.unseenAnimals[0].name + ", [" + this.unseenAnimals[0].age + "]";
     }
     else {
+      this.attachmentsURLS.push(normalizeURL("assets/imgs/flame.jpg"));
       return "No more animals to find :(";
     }
   }
 
+
   getAnimalOneByOnePicture(){
+    this.attachmentsURLS = [];
     if (this.unseenAnimals.length != 0) {
       console.log(this.unseenAnimals[0]);
-      return this.getImageUrl(this.unseenAnimals[0]);
-    }
-    else {
-      return normalizeURL("assets/imgs/flame.jpg");
+      console.log(this.unseenAnimals[0]._attachments);
+      // this.unseenAnimalId = this.unseenAnimals[0]._id;
+      for(let picture of Object.keys(this.unseenAnimals[0]._attachments)){
+        this.attachmentsURLS.push(this.getImageUrl(this.unseenAnimals[0], picture));
+      }
     }
   }
 
-  getImageUrl(obj) {
+  getImageUrl(matchAnimal, picture) {
     try{
-      return this.aniProv.remote + "/" + obj._id + "/" + Object.keys(obj._attachments)[0];
+      console.log(this.aniProv.remote + "/" + matchAnimal._id + "/" + picture);
+      return this.aniProv.remote + "/" + matchAnimal._id + "/" + picture;
     } catch (e){
       return normalizeURL("assets/imgs/logo.jpg");
     }
@@ -110,6 +117,7 @@ export class HomePage {
       this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, answer);
       this.matches.push(this.unseenAnimals[0]._id);
       this.unseenAnimals.shift();
+      this.getAnimalOneByOnePicture();
       if(this.unseenAnimals.length < 3) {
         this.getNextAnimalBatch(0.05)
       }
