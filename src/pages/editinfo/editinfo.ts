@@ -86,10 +86,10 @@ export class EditinfoPage {
     this.refreshPage();
   }
 
-  addPicture(){
+  addPicture() {
     this.animal._attachments[this.imgName] = {"content_type": this.type, "data": this.imgData};
     this.aniProv.update(this.animal).then(() => {
-      let p = new Promise( resolve => setTimeout(resolve, 1000) );
+      let p = new Promise(resolve => setTimeout(resolve, 2000));
       p.then(() => {
         this.refreshPage();
       });

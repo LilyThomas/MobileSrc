@@ -29,9 +29,19 @@
 <ion-content padding>
 
   <div>
-    <img (click)="goToProfile()" src="{{getAnimalOneByOnePicture()}}"/>
+    <ion-slides>
+      <ion-slide *ngFor="let url of attachmentsURLS">
+        <img src="{{url}}" (click)="goToProfile()">
+      </ion-slide>
+    </ion-slides>
     <h3>{{getAnimalsOneByOneName()}}</h3>
   </div>
+
+
+  <!--<div>-->
+    <!--<img (click)="goToProfile()" src="{{getAnimalOneByOnePicture()}}"/>-->
+    <!--<h3>{{getAnimalsOneByOneName()}}</h3>-->
+  <!--</div>-->
 
   <div>
     <ion-grid>
