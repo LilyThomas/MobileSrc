@@ -23,7 +23,7 @@ import {File} from "@ionic-native/file";
 import {Transfer} from "@ionic-native/transfer";
 import {HttpClientModule} from "@angular/common/http";
 import {MatchProvider} from "../providers/matches/matches";
-
+import {AddroomPage} from "../pages/addroom/addroom";
 
 export class CameraMock extends Camera {
 
@@ -45,7 +45,8 @@ export class CameraMock extends Camera {
     ConversationPage,
     ProfilePage,
     HomePage,
-    RegisterPage
+    RegisterPage,
+    AddroomPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +62,8 @@ export class CameraMock extends Camera {
     ConversationPage,
     ProfilePage,
     HomePage,
-    RegisterPage
+    RegisterPage,
+    AddroomPage
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -73,7 +75,8 @@ export class CameraMock extends Camera {
     ConversationPage,
     ProfilePage,
     HomePage,
-    RegisterPage
+    RegisterPage,
+    AddroomPage
   ],
   providers: [
     StatusBar,

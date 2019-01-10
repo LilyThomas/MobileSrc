@@ -17,12 +17,11 @@ export class MatchProvider {
   constructor(
     public http: HttpClient) {
     PouchDB.plugin(PouchDBFind);
-
   }
 
   createPouchDB() {
     this.pdb = new PouchDB('matches');
-    this.remote = 'http://localhost:5984/matches';
+    this.remote = 'http://192.168.0.218:5984/animals';
 
     let options = {
       live: true,
@@ -46,37 +45,52 @@ export class MatchProvider {
   }
 
   getSeenIds(id){
-    // let answeredIds: any = [];
+    let pdb = this.pdb;
 
-    let _seenIdsPromise = this.pdb.find({
+    return pdb.find({
       selector: {
         $or : [
-          {animalId1: id}, {animalId2: id}
+          {animalId1: id},
+          {animalId2: id}
         ]
       }
     });
-    // .then(function(result){
-    //   let answeredIds: any = [];
-    //   for(let seen of result.docs){
-    //     console.log(seen);
-    //     if(seen.animalId1 == id && typeof seen.match1 != 'undefined'){
-    //       answeredIds.push(seen.animalId2);
-    //     }
-    //     else if(seen.animalId2 == id && typeof seen.match2 != 'undefined'){
-    //       answeredIds.push(seen.animalId1);
-    //     }
-    //   }
-    //   console.log("this.pdb.find");
-    //   aniProv.getRandomBatch(answeredIds, id);
-    // });
+  }
 
-    // Promise.resolve(_match);
-    //
-    // console.log("getSeenIds");
-    // console.log(answeredIds);
-    // console.log(_match);
+  insertAnswer(id, otherId, answer){
 
-    return _seenIdsPromise;
+    this.pdb.find({
+      selector: {animalId1: otherId, animalId2: id}
+    }).then((result) => {
+      if(result.docs.length != 0){
+        let match = result.docs[0];
+        match.match2 = answer;
+        this.update(match);
+      } else{
+        let match: any = {};
+        match.animalId1 = id;
+        match.animalId2 = otherId;
+        match.match1 = answer;
+        this.create(match);
+      }
+    })
+  }
+
+  findMatches(id){
+    let pdb = this.pdb;
+
+    return pdb.find({
+      selector:{
+        $and: [
+          {match1: true},
+          {match2: true},
+          {$or:[
+            {animalId1: id},
+            {animalId2: id}
+          ]}
+        ]
+      }
+    })
   }
 
 }

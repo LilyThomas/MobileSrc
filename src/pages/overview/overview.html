@@ -23,22 +23,14 @@
 </ion-header>
 
 <ion-content>
-
   <div>
-    <p text-center >
-      <ion-buttons>
-        <button (click)="goToProfile()" >
-          <!--<img src="assets/imgs/profile.jpg">-->
-          <img src='{{tempImagePath}}'>
-        </button>
-      </ion-buttons>
-    </p>
-  </div>
-
-  <div>
-    <p text-center>
-      Twinkel, 8
-    </p>
+    <ion-slides>
+      <ion-slide *ngFor="let url of attachmentsURLS">
+        <img src="{{url}}">
+      </ion-slide>
+    </ion-slides>
+    <h3>{{getNameAndAge()}}</h3>
+    <p>{{getDescription()}}</p>
   </div>
 
   <div>

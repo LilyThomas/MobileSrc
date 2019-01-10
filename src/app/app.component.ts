@@ -2,6 +2,17 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import * as firebase from 'firebase';
+
+
+const config = {
+  apiKey: 'AIzaSyAFsUb0pyRmbR9TC4JjkJ8qv57mHEvMCZA',
+  authDomain: 'ionic-t.firebaseapp.com',
+  databaseURL: 'https://ionic-t.firebaseio.com/',
+  projectId: 'ionic-t',
+  storageBucket: 'gs://ionic-t.appspot.com',
+};
+
 
 @Component({
   templateUrl: 'app.html'
@@ -18,6 +29,8 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
+
+    firebase.initializeApp(config);
 
     this.pages = [
       { title: 'LoginPage', component: 'LoginPage' },

@@ -14,7 +14,7 @@ export class AnimalProvider {
 
   createPouchDB() {
     this.pdb = new PouchDB('animals');
-    this.remote = 'http://localhost:5984/animals';
+    this.remote = 'http://192.168.0.218:5984/animals';
 
     let options = {
       live: true,
@@ -42,7 +42,6 @@ export class AnimalProvider {
   }
 
   read() {
-    console.log("hello reader");
     let pdb = this.pdb;
 
     function allDocs() {
@@ -51,9 +50,7 @@ export class AnimalProvider {
         .then(docs => {
           return docs.rows;
         });
-
-      console.log(_animals);
-      console.log(Promise.resolve(_animals));
+      ;
 
       return Promise.resolve(_animals);
     };
@@ -61,7 +58,29 @@ export class AnimalProvider {
     return allDocs();
   }
 
-  getAnimalRandomBatch(id, seenIdsPromise){
+  getMatchedAnimals(id, findMatchesPromise){
+    let pdb = this.pdb;
+
+    return findMatchesPromise.then(function(result){
+      let matchedId: any = [];
+
+      for(let match of result.docs){
+        if(match.animalId1 == id){
+          matchedId.push(match.animalId2);
+        }
+        else {
+          matchedId.push(match.animalId1);
+        }
+      }
+      return pdb.find({
+        selector: {
+          _id: {$in: matchedId}
+        }
+      });
+    });
+  }
+
+  getAnimalRandomBatch(id, seenIdsPromise, seenIds, range, animal){
 
     let randomBatchPromise:any;
     let pdb = this.pdb;
@@ -69,7 +88,6 @@ export class AnimalProvider {
     randomBatchPromise = seenIdsPromise.then(function(result){
       let answeredIds: any = [];
       for(let seen of result.docs){
-        console.log(seen);
         if(seen.animalId1 == id && typeof seen.match1 != 'undefined'){
           answeredIds.push(seen.animalId2);
         }
@@ -77,26 +95,96 @@ export class AnimalProvider {
           answeredIds.push(seen.animalId1);
         }
       }
-      console.log("this.pdb.find");
+      answeredIds = Array.from(new Set(answeredIds.concat(seenIds)));
 
-      let _randomBatchPromise = pdb.find({
-        selector: {
-          $and: [
-            {_id: {$ne: id}},
-            {_id: {$nin: answeredIds}}
-          ]
-        }
-      })
+      let rand = Math.random();
+
+      let upper = rand + range;
+      let lower= rand - range;
+      let _randomBatchPromise;
+
+      if(upper > 1) {
+        _randomBatchPromise = pdb.find({
+          selector: {
+            $and:[
+              {_id: {$ne: id}},
+              {_id: {$nin: answeredIds}},
+              {$or: [
+                {random: {$gte: lower}},
+                {random: {$lte: upper-1}}
+              ]},
+              {random: {$gt: 0}}, //hack to select it
+              // lookingfor: {$elemMatch: animal.gender},
+              {gender: {$in: animal.lookingfor}},
+              {age: {$gte: animal.minAge}},
+              {age: {$lte: animal.maxAge}},
+              {minAge: {$lte: animal.age}},
+              {maxAge: {$gte: animal.age}}
+          ],
+
+          },
+          limit: 5,
+          // sort: ['random']
+        });
+      }
+      else if(lower < 0) {
+        _randomBatchPromise = pdb.find({
+          selector: {
+            $and:[
+              {_id: {$ne: id}},
+              {_id: {$nin: answeredIds}},
+              {$or: [
+                {random: {$gte: lower + 1}},
+                {random: {$lte: upper}}
+            ]},
+              {random: {$gt: 0}}, //hack to select it
+              // lookingfor: {$elemMatch: animal.gender},
+              {gender: {$in: animal.lookingfor}},
+              {age: {$gte: animal.minAge}},
+              {age: {$lte: animal.maxAge}},
+              {minAge: {$lte: animal.age}},
+              {maxAge: {$gte: animal.age}}
+            ],
+          },
+          limit: 5,
+          // sort: ['random']
+        });
+      }
+      else {
+        _randomBatchPromise = pdb.find({
+          selector: {
+            $and: [
+              {_id: {$ne: id}},
+              {_id: {$nin: answeredIds}},
+              {random: {$gte: lower}},
+              {random: {$lte: upper}},
+              // lookingfor: {$elemMatch: animal.gender},
+              {gender: {$in: animal.lookingfor}},
+              {age: {$gte: animal.minAge}},
+              {age: {$lte: animal.maxAge}},
+              {minAge: {$lte: animal.age}},
+              {maxAge: {$gte: animal.age}}
+            ],
+          },
+          limit: 5,
+          // sort: ['random']
+        });
+      }
       return _randomBatchPromise;
     });
-
-
-    //   .then(function(result) {
-    //   console.log(seen);
-    //   console.log(result.docs);
-    // })
 
     return randomBatchPromise;
   }
 
+  findAnimalById(id){
+    return this.pdb.find({
+      selector:{ _id: id}
+    });
+  }
+
+  findAnimalByName(name){
+    return this.pdb.find({
+      selector:{name: name}
+    });
+  }
 }

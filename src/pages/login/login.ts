@@ -3,6 +3,8 @@ import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import {AnimalProvider} from "../../providers/animals/animals";
 import {HomePage} from "../home/home";
 import {RegisterPage} from "../register/register";
+import {ChatPage} from "../chat/chat";
+import {ConversationPage} from "../conversation/conversation";
 
 
 @IonicPage()
@@ -12,7 +14,6 @@ import {RegisterPage} from "../register/register";
 })
 export class LoginPage {
 
-  private animals;
   private homepage = HomePage;
   private registerpage = RegisterPage;
 
@@ -20,28 +21,33 @@ export class LoginPage {
   name: string;
   password: string;
 
+  animal:any;
+
   constructor(
     public navCtrl: NavController,
     public aniProv: AnimalProvider
-  ) {}
-
-  ionViewDidEnter() {
+  ) {
     this.aniProv.createPouchDB();
-
-    this.aniProv.read()
-      .then(animals => {
-        this.animals = animals;
-      }).catch((err) => { console.log(err)} );
   }
 
+
+
   login(){
-    let id = "";
-    for(let animal of this.animals){
-      if(animal.doc.name == this.name && animal.doc.password == this.password){
-        id = animal.doc._id;
-        this.goToHomepage(id);
+    this.aniProv.findAnimalByName(this.name).then((result) => {
+      if(result.docs.length == 1){
+        this.animal = result.docs[0];
+        this.goToHomepage(this.animal._id);
+
+
+
+        // dierennaam aan nicknaam chat koppelen
+        this.navCtrl.setRoot(ChatPage, {
+          nickname: name
+        })
+
+
       }
-    }
+    });
   }
 
   goToHomepage(id){
@@ -51,5 +57,7 @@ export class LoginPage {
   register(){
     return this.navCtrl.setRoot(this.registerpage);
   }
+
+
 
 }

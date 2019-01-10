@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { EmployeeProvider } from './../../providers/employee/employee';
-import {EmployeePage} from "../employee/employee";
 import {OverviewPage} from "../overview/overview";
 import {ChatPage} from "../chat/chat";
 import {AnimalProvider} from "../../providers/animals/animals";
 import {normalizeURL} from "ionic-angular";
 import {MatchProvider} from "../../providers/matches/matches";
+import {ProfilePage} from "../profile/profile";
 
 @IonicPage()
 @Component({
@@ -16,14 +15,18 @@ import {MatchProvider} from "../../providers/matches/matches";
 export class HomePage {
 
   private animals;
-  private matches;
+  private matches: any = [];
 
   id:any;
   index:any = 0;
-  seen:any;
+  unseenAnimals: any = [];
+  animal;
 
   overviewPage=OverviewPage;
   chatPage=ChatPage;
+  profilepage=ProfilePage;
+
+  attachmentsURLS:any=[];
 
   constructor(
     public navCtrl: NavController,
@@ -32,105 +35,98 @@ export class HomePage {
     public matchProv: MatchProvider
   ) {
     this.id = navParams.get('id');
-  }
-
-  ionViewDidEnter() {
     this.matchProv.createPouchDB();
     this.aniProv.createPouchDB();
+    aniProv.findAnimalById(this.id).then((result:any) => {
+      this.animal = result.docs[0];
+      this.getNextAnimalBatch(0.05);
+    });
+  }
 
-    this.aniProv.read()
-      .then(animals => {
-        this.animals = animals;
-      }).catch((err) => { console.log(err)} );
 
+  getNextAnimalBatch(range){
     let seenIdsPromise = this.matchProv.getSeenIds(this.id);
-    let randomBatchPromise = this.aniProv.getAnimalRandomBatch(this.id, seenIdsPromise);
+    let randomBatchPromise = this.aniProv.getAnimalRandomBatch(this.id, seenIdsPromise, this.matches, range, this.animal);
 
-    randomBatchPromise.then(function(result) {
-      console.log(result.docs);
+    randomBatchPromise.then((result:any) => {
+      if(result.docs.length > 0) {
+        for(let animal of result.docs) {
+          let found = false;
+          for(let unseenAnimal of this.unseenAnimals) {
+            if(animal._id == unseenAnimal._id){
+              found = true;
+            }
+          }
+
+          if(!found) {
+            this.unseenAnimals.push(animal);
+            // this.getAnimalPictureSlide();
+            this.getAnimalOneByOnePicture();
+          }
+        }
+      }
+      if(this.unseenAnimals.length < 6 && range <= 1) {
+        this.getNextAnimalBatch(range + 0.2);
+      }
     })
-
-    // this.aniProv.getAnimalRandomBatch(this.id, this.matchProv);
-
   }
 
-  // getFirstKeys(obj) {
-  //   return Object.keys(obj)[0];
-  // }
-
-  getAnimalsOneByOne(){
-
-    // if(current._id == this.id) {
-    //   current = this.animals[this.getNextIndex()];
-    //   console.log(this.index);
-    //   console.log(current.doc.name);
-    // }
-
-    // if(typeof this.animals != "undefined"){
-    //   console.log(this.animals[0]);
-    //
-    // }
+  getAnimalsOneByOneName(){
+    if (this.unseenAnimals.length != 0) {
+      return this.unseenAnimals[0].name + ", [" + this.unseenAnimals[0].age + "]";
+    }
+    else {
+      this.attachmentsURLS.push(normalizeURL("assets/imgs/flame.jpg"));
+      return "No more animals to find :(";
+    }
   }
 
-  // getNextIndex(){
-  //   if(this.index == this.animals.length()){
-  //     this.index = 0;
-  //   } else{
-  //     this.index = this.index + 1;
-  //   }
-  //   return this.index;
-  // }
 
-  // getImageUrl(obj) {
-  //   try{
-  //     return this.aniProv.remote + "/" + obj.doc._id + "/" + Object.keys(obj.doc._attachments)[0];
-  //   } catch (e){
-  //     return normalizeURL("assets/imgs/profile.jpg");
-  //   }
-  //
-  // }
+  getAnimalOneByOnePicture(){
+    this.attachmentsURLS = [];
+    if (this.unseenAnimals.length != 0) {
+      console.log(this.unseenAnimals[0]);
+      console.log(this.unseenAnimals[0]._attachments);
+      // this.unseenAnimalId = this.unseenAnimals[0]._id;
+      for(let picture of Object.keys(this.unseenAnimals[0]._attachments)){
+        this.attachmentsURLS.push(this.getImageUrl(this.unseenAnimals[0], picture));
+      }
+    }
+  }
 
-  // showDetails(employee) {
-  //   let modal = this.modalCtrl.create('EmployeePage', { employee: employee });
-  //   modal.onDidDismiss(data => {
-  //     this.reReadEmployees();
-  //   });
-  //   modal.present();
-  // }
-  //
-  // addEmployee() {
-  //   let modal = this.modalCtrl.create('EmployeePage', { employee: null });
-  //   modal.onDidDismiss(data => {
-  //     this.reReadEmployees()
-  //   });
-  //   modal.present();
-  // }
-  //
-  // reReadEmployees() {
-  //  this.empProv.read()
-  //    .then(employees => {
-  //      this.employees = employees;
-  //    }).catch((err) => { console.log(err)} );
-  // }
+  getImageUrl(matchAnimal, picture) {
+    try{
+      console.log(this.aniProv.remote + "/" + matchAnimal._id + "/" + picture);
+      return this.aniProv.remote + "/" + matchAnimal._id + "/" + picture;
+    } catch (e){
+      return normalizeURL("assets/imgs/logo.jpg");
+    }
+  }
 
   goToChat(){
-    this.navCtrl.setRoot(this.chatPage);
+    this.navCtrl.setRoot(this.chatPage, {id: this.id});
   }
 
   goToOverview(){
-    this.navCtrl.setRoot(this.overviewPage);
+    this.navCtrl.setRoot(this.overviewPage, {id: this.id});
   }
 
-  notLiked(){
 
+  answered(answer){
+    if(this.unseenAnimals.length != 0){
+      this.matchProv.insertAnswer(this.id, this.unseenAnimals[0]._id, answer);
+      this.matches.push(this.unseenAnimals[0]._id);
+      this.unseenAnimals.shift();
+      this.getAnimalOneByOnePicture();
+      if(this.unseenAnimals.length < 3) {
+        this.getNextAnimalBatch(0.05)
+      }
+    }
   }
 
-  liked(){
-    // this.getAnimalsOneByOne();
-    // console.log(this.getAnimalsOneByOne().doc.name);
-  }
-
-  goToProfile(animal){
-
+  goToProfile(){
+    if(this.unseenAnimals.length != 0) {
+      this.navCtrl.setRoot(this.profilepage, {id: this.id, animalId: this.unseenAnimals[0]._id});
+    }
   }
 }
